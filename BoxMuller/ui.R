@@ -10,21 +10,25 @@ library(shiny)
 shinyUI(fluidPage(
 
   # Application title
-  titlePanel("Old Faithful Geyser Data"),
+  titlePanel("Nombre: Stephane Keil Rios - CVU: 160559 -  Tarea 2 - Estadistica Computacional - Metodo de Box-Muller para generación de numeros aleatorios con distribución normal"),
 
   # Sidebar with a slider input for number of bins
-  sidebarLayout(
+  sidebarLayout(position = "right",
     sidebarPanel(
-      sliderInput("bins",
-                  "Number of bins:",
-                  min = 1,
-                  max = 50,
-                  value = 30)
+      numericInput("num.aleatorios",
+                  "Numero de aleatorios a generar:",
+                  min = 0,
+                  max = 100000,
+                  value = 1000,
+                  step = 1000
+                  )
+      
     ),
 
     # Show a plot of the generated distribution
     mainPanel(
-      plotOutput("distPlot")
+      plotOutput("distPlot"),
+      plotOutput("distPlot1")
     )
   )
 ))
