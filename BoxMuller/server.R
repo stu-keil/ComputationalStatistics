@@ -43,6 +43,17 @@ shinyServer(function(input, output) {
     
     
   })
+  output$distPlot2 <- renderPlot({
+    
+    
+    x <- sqrt(-2*log(unif1()))*cos(unif2())
+    y <- sqrt(-2*log(unif1()))*sin(unif2())
+    par(mfrow=c(1,2))
+    plot(x,y,col='skyblue', main = "Scatter of normally distributed random numbers based on BoxMuller")
+    plot(rnorm(length(x)),rnorm(length(x)), main = "Scatter using rnorm function for two vectors")
+    
+    
+  })
 
 })
 
