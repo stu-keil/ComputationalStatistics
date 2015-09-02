@@ -18,11 +18,11 @@ shinyServer(function(input, output) {
     x <- sqrt(-2*log(unif1()))*cos(unif2())
     y <- sqrt(-2*log(unif1()))*sin(unif2())
     par(mfrow=c(1,3))
-    plot(density(x),col='skyblue',lwd=2, main = "Density for the first set of random numbers", ylim = c(0,0.4))
-    plot(density(y),col='darkgray',lwd=2, main = "Density for the second set of random numbers", ylim = c(0,0.4))
+    plot(density(x),col='skyblue',lwd=2, main = "Density for the first set\n of random numbers", ylim = c(0,0.4))
+    plot(density(y),col='darkgray',lwd=2, main = "Density for the second set\n of random numbers", ylim = c(0,0.4))
     xnorm   <- seq(-4,4,length=1000)
     ynorm   <- dnorm(xnorm,mean=0, sd=1)
-    plot(xnorm,ynorm, type="l",col = 'peru', lwd=2, main = "Density of the standard normal distribution", ylim = c(0,0.4))
+    plot(xnorm,ynorm, type="l",col = 'peru', lwd=2, main = "Density of the \nstandard normal distribution", ylim = c(0,0.4))
 
     
 
@@ -33,11 +33,12 @@ shinyServer(function(input, output) {
     x <- sqrt(-2*log(unif1()))*cos(unif2())
     y <- sqrt(-2*log(unif1()))*sin(unif2())
     par(mfrow=c(1,1))
-    plot(density(x),col='skyblue',lwd=2, main = "Density for the first set of random numbers", ylim = c(0,0.4) )
-    lines(density(y),col='darkgray',lwd=2, main = "Density for the second set of random numbers")
+    plot(density(x),col='skyblue',lwd=2, main = "Comparison between my random generated numbers\n versus the \nstandard normal distribution", ylim = c(0,0.4) )
+    lines(density(y),col='darkgray',lwd=2)
     xnorm   <- seq(-4,4,length=1000)
     ynorm   <- dnorm(xnorm,mean=0, sd=1)
-    lines(xnorm,ynorm, type="l",col = 'peru', lwd=2, main = "Density of the standard normal distribution")
+    lines(xnorm,ynorm, type="l",col = 'peru', lwd=2)
+    legend(x="topright",c("Aleatorios 1","Aleatorios 2","N(0,1)"),lty=c(1,1,1), lwd=c(2,2,2),col=c("skyblue","darkgray","peru"),cex = 0.75)
     
     
     
