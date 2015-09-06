@@ -21,7 +21,7 @@ shinyServer(function(input, output) {
   })
   output$distPlot <- renderPlot({
     
-    plot(unif(),dbeta(unif(),input$alpha,input$beta),col = 'darkgray', border = 'white', xlab="Rango de 0 a 1", ylab= "fx", 
+    plot(unif(),dbeta(unif(),input$alpha,input$beta),col = 'darkgray',  xlab="Rango de 0 a 1", ylab= "fx", 
          main = paste0("Esta es la funcion de desnidad de probabilidad de Beta(",input$alpha,",",input$beta,")"))
     abline(v=input$alpha/(input$alpha+input$beta),lty = 1, col = 21, lwd =4)
     abline(v=(input$alpha/(input$alpha+input$beta))+sqrt((input$alpha*input$beta)/((input$alpha+input$beta)^2*(input$alpha+input$beta+1))),lty = 2, col = "red", lwd =2)
@@ -29,7 +29,7 @@ shinyServer(function(input, output) {
   })
   output$distPlot1 <- renderPlot({
     
-    plot(unif(),pbeta(unif(),input$alpha,input$beta),col = 'skyblue', border = 'white', xlab="Rango de 0 a 1", ylab= "Fx", 
+    plot(unif(),pbeta(unif(),input$alpha,input$beta),col = 'skyblue',  xlab="Rango de 0 a 1", ylab= "Fx", 
          main = paste0("Esta es la funcion cumulativa de probabilidad de Beta(",input$alpha,",",input$beta,")"))
     abline(v=input$alpha/(input$alpha+input$beta),lty = 1, col = 21, lwd =4)
     abline(v=(input$alpha/(input$alpha+input$beta))+sqrt((input$alpha*input$beta)/((input$alpha+input$beta)^2*(input$alpha+input$beta+1))),lty = 2, col = "red", lwd =2)
