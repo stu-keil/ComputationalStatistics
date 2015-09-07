@@ -48,3 +48,5 @@ Beta | Just a shniy app to better understand the Beta Function very much used in
 ~~In case you haven't noticed I am just learning the basics of markdown~~
 :poop:
 
+![A link to my first pi approximation](https://github.com/stu-keil/CompuStat/blob/master/Rplot.png)
+Format: ![Hello](hi)
