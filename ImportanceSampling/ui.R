@@ -16,11 +16,11 @@ shinyUI(fluidPage(
   sidebarLayout(
     sidebarPanel(
       helpText("Selecciona el parametro Lambda de la función Exponencial para la que aproximaremos la integral"),
-      sliderInput("bins",
-                  "Number of bins:",
-                  min = 1,
-                  max = 50,
-                  value = 30)
+      sliderInput("m",
+                  "Lambda para exponencial",
+                  min = 0,
+                  max = 5,
+                  value = 1)
     ),
 
     # Show a plot of the generated distribution
