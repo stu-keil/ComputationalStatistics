@@ -24,7 +24,16 @@ shinyUI(fluidPage(
 
     # Show a plot of the generated distribution
     mainPanel(
-      plotOutput("distPlot")
+      h1(paste0("Comparativo de Montecarlo con y sin Importance Sampling con diversas Funciones")),
+      
+      tabsetPanel(
+        tabPanel("Montecarlo Tradicional", plotOutput("distPlot")),
+        tabPanel("Montecarlo Importance Samplingcon Exponencial Truncada", plotOutput("distPlot1")),
+        tabPanel("Montecarlo Importance Sampling con Beta", plotOutput("distPlot2"))
+      ),
+      h1(paste0("Las velocidades de convergencia son diferentes, se presentan el numero de simulaciones y el tamaño de las simulaciones para cada uno de los metodos")),
+      
+      plotOutput("distPlot3")
     )
   )
 ))
