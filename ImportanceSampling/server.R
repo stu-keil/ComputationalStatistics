@@ -68,7 +68,7 @@ shinyServer(function(input, output) {
   res_montecarlo_importance <- sapply(simulaciones,montecarlo_importance,0.05,my_func,0,2,lambda,truncate,m=m)
   errores_importance <- analyticalintegration_0_2(0,2,m) - sapply(res_montecarlo_importance[1,],c) 
   df <- cbind(df,errores_importance)
-  plot(1:length(simulaciones),errores_importance,type="l")
+  #plot(1:length(simulaciones),errores_importance,type="l")
   
   res_montecarlo_importance_beta <- sapply(simulaciones,montecarlo_importance_beta,0.05,my_func,0,2,a_beta,b_beta,m=m)
   errores_importance_beta <- analyticalintegration_0_2(0,2,m) - sapply(res_montecarlo_importance_beta[1,],c) 
@@ -85,12 +85,8 @@ shinyServer(function(input, output) {
     lines(sapply(res_montecarlo_raw[2,],c),type="l",lty=2,col="red")
     lines(sapply(res_montecarlo_raw[3,],c),type="l",lty=2,col="red")
     abline(h =analyticalintegration_0_2(0,2,m), untf = FALSE)
-    
-
   })
   output$distPlot1 <- renderPlot({
-    
-    
     
     plot(sapply(res_montecarlo_importance[1,],c),type="l")
     lines(sapply(res_montecarlo_importance[2,],c),type="l",lty=2,col="red")
@@ -100,8 +96,6 @@ shinyServer(function(input, output) {
   })
   output$distPlot2 <- renderPlot({
     
-  
-    
     plot(sapply(res_montecarlo_importance_beta[1,],c),type="l")
     lines(sapply(res_montecarlo_importance_beta[2,],c),type="l",lty=2,col="red")
     lines(sapply(res_montecarlo_importance_beta[3,],c),type="l",lty=2,col="red")
@@ -109,7 +103,6 @@ shinyServer(function(input, output) {
     
   })
   output$distPlot3 <- renderPlot({
-    
     
     df1 <- melt(df,id.vars = 1,variable.name = "variable")
     df1 <- cbind(rep(1:length(simulaciones),3),df1)
