@@ -21,7 +21,7 @@ shinyServer(function(input, output) {
   }
   m=1
   
-  analyticalintegration_0_2(0,2,m)
+  
   
   montecarlo_tartare <- function(nsim=10000,alpha=0.05,fun=mifunc,a=0,b=1,...){
     valores.uniformes <- runif(nsim,a,b)
@@ -61,7 +61,7 @@ shinyServer(function(input, output) {
     return (data.frame(point_estimate = mi.func, int.low = interval.lower,int.upp = interval.upper))
   }  
   output$text1 <- renderText({ 
-    paste0("Saludos al satelite morelos")
+    paste0("El valor de la integral deberia ser ",analyticalintegration_0_2(0,2,m))
   })
   
   output$distPlot <- renderPlot({
@@ -75,6 +75,7 @@ shinyServer(function(input, output) {
     plot(sapply(res_montecarlo_raw[1,],c),type="l")
     lines(sapply(res_montecarlo_raw[2,],c),type="l",lty=2,col="red")
     lines(sapply(res_montecarlo_raw[3,],c),type="l",lty=2,col="red")
+    abline(h =analyticalintegration_0_2(0,2,m), untf = FALSE)
 
   })
   output$distPlot1 <- renderPlot({
@@ -87,6 +88,7 @@ shinyServer(function(input, output) {
     plot(sapply(res_montecarlo_importance[1,],c),type="l")
     lines(sapply(res_montecarlo_importance[2,],c),type="l",lty=2,col="red")
     lines(sapply(res_montecarlo_importance[3,],c),type="l",lty=2,col="red")
+    abline(h =analyticalintegration_0_2(0,2,m), untf = FALSE)
     
   })
   output$distPlot2 <- renderPlot({
@@ -99,6 +101,7 @@ shinyServer(function(input, output) {
     plot(sapply(res_montecarlo_importance_beta[1,],c),type="l")
     lines(sapply(res_montecarlo_importance_beta[2,],c),type="l",lty=2,col="red")
     lines(sapply(res_montecarlo_importance_beta[3,],c),type="l",lty=2,col="red")
+    abline(h =analyticalintegration_0_2(0,2,m), untf = FALSE)
     
   })
   output$distPlot3 <- renderPlot({

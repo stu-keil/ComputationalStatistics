@@ -15,6 +15,7 @@ shinyUI(fluidPage(
   # Sidebar with a slider input for number of bins
   sidebarLayout(
     sidebarPanel(
+      helpText("Selecciona el parametro Lambda de la función Exponencial para la que aproximaremos la integral"),
       sliderInput("bins",
                   "Number of bins:",
                   min = 1,
@@ -31,6 +32,7 @@ shinyUI(fluidPage(
         tabPanel("Montecarlo Importance Samplingcon Exponencial Truncada", plotOutput("distPlot1")),
         tabPanel("Montecarlo Importance Sampling con Beta", plotOutput("distPlot2"))
       ),
+      textOutput("text1"),
       h1(paste0("Las velocidades de convergencia son diferentes, se presentan el numero de simulaciones y el tamaño de las simulaciones para cada uno de los metodos")),
       
       plotOutput("distPlot3")
