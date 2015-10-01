@@ -10,7 +10,7 @@ library(shiny)
 shinyUI(fluidPage(
 
   # Application title
-  titlePanel("Old Faithful Geyser Data"),
+  titlePanel("Practicing Importance Sampling"),
 
   # Sidebar with a slider input for number of bins
   sidebarLayout(
@@ -20,7 +20,37 @@ shinyUI(fluidPage(
                   "Lambda para exponencial",
                   min = 0,
                   max = 5,
-                  value = 1)
+                  value = 1),
+      numericInput("lowsim",
+                   "Simulaciones empiezan desde",
+                   min = 0,
+                   max = 100000,
+                   value = 10000),
+      numericInput("uppsim",
+                   "Simulaciones terminan en",
+                   min = 0,
+                   max = 1000000,
+                   value = 100000),
+      numericInput("by",
+                   "Simulaciones avanzan de",
+                   min = 0,
+                   max = 100000,
+                   value = 10000),
+      numericInput("lambda",
+                   "Lambda para exponencial truncada",
+                   min = 0,
+                   max = 5,
+                   value = 0.5),
+      numericInput("alpha",
+                   "Parametro alpha de la distribución Beta",
+                   min = 0,
+                   max = 10,
+                   value = 1),
+      numericInput("beta",
+                   "Parametro beta de la distribución Beta",
+                   min = 0,
+                   max = 10,
+                   value = 2)
     ),
 
     # Show a plot of the generated distribution

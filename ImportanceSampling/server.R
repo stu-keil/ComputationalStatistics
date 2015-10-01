@@ -14,10 +14,10 @@ shinyServer(function(input, output) {
 
   m=reactive(input$m)
   simulaciones <- c(seq(1000,10000,1000),seq(10000,100000,10000))
-  lambda=0.5
+  lambda=reactive(input$lambda)
   truncate=2
-  a_beta=1
-  b_beta=2
+  a_beta=reactive(input$alpha)
+  b_beta=reactive(input$beta)
   
   my_func <- function(x,m = 1){
     m*exp(-m*x)
@@ -65,11 +65,11 @@ shinyServer(function(input, output) {
   errores <- reactive(analyticalintegration_0_2(0,2,m()) - sapply(res_montecarlo_raw()[1,],c)) 
   vector1 <- reactive(errores())
   #plot(1:length(simulaciones),errores,type="l")
-  res_montecarlo_importance <- reactive(sapply(simulaciones,montecarlo_importance,0.05,my_func,0,2,lambda,truncate,m=m()))
+  res_montecarlo_importance <- reactive(sapply(simulaciones,montecarlo_importance,0.05,my_func,0,2,lambda(),truncate,m=m()))
   errores_importance <- reactive(analyticalintegration_0_2(0,2,m()) - sapply(res_montecarlo_importance()[1,],c)) 
   vector2 <- reactive(errores_importance())
   #plot(1:length(simulaciones),errores_importance,type="l")
-  res_montecarlo_importance_beta <- reactive(sapply(simulaciones,montecarlo_importance_beta,0.05,my_func,0,2,a_beta,b_beta,m=m()))
+  res_montecarlo_importance_beta <- reactive(sapply(simulaciones,montecarlo_importance_beta,0.05,my_func,0,2,a_beta(),b_beta(),m=m()))
   errores_importance_beta <- reactive(analyticalintegration_0_2(0,2,m()) - sapply(res_montecarlo_importance_beta()[1,],c)) 
   vector3 <- reactive(errores_importance_beta())
   #plot(1:length(simulaciones),errores_importance_beta,type="l")
@@ -81,14 +81,14 @@ shinyServer(function(input, output) {
   
   output$distPlot <- renderPlot({
    
-    plot(sapply(res_montecarlo_raw()[1,],c),type="l")
+    plot(sapply(res_montecarlo_raw()[1,],c),type="l",xlab="Indice de Simulación",ylab="Valor de la aproximación",main="Aproximación de la Integral con Montecarlo Crudo",ylim=c(0.84,0.88))
     lines(sapply(res_montecarlo_raw()[2,],c),type="l",lty=2,col="red")
     lines(sapply(res_montecarlo_raw()[3,],c),type="l",lty=2,col="red")
     abline(h =analyticalintegration_0_2(0,2,m()), untf = FALSE)
   })
   output$distPlot1 <- renderPlot({
     
-    plot(sapply(res_montecarlo_importance()[1,],c),type="l")
+    plot(sapply(res_montecarlo_importance()[1,],c),type="l",xlab="Indice de Simulación",ylab="Valor de la aproximación",main="Aproximación de la Integral con una Exponencial Truncada en 2",ylim=c(0.84,0.88))
     lines(sapply(res_montecarlo_importance()[2,],c),type="l",lty=2,col="red")
     lines(sapply(res_montecarlo_importance()[3,],c),type="l",lty=2,col="red")
     abline(h =analyticalintegration_0_2(0,2,m()), untf = FALSE)
@@ -96,7 +96,7 @@ shinyServer(function(input, output) {
   })
   output$distPlot2 <- renderPlot({
     
-    plot(sapply(res_montecarlo_importance_beta()[1,],c),type="l")
+    plot(sapply(res_montecarlo_importance_beta()[1,],c),type="l",xlab="Indice de Simulación",ylab="Valor de la aproximación",main="Aproximación de la Integral con una Beta",ylim=c(0.84,0.88))
     lines(sapply(res_montecarlo_importance_beta()[2,],c),type="l",lty=2,col="red")
     lines(sapply(res_montecarlo_importance_beta()[3,],c),type="l",lty=2,col="red")
     abline(h =analyticalintegration_0_2(0,2,m()), untf = FALSE)
@@ -104,11 +104,11 @@ shinyServer(function(input, output) {
   })
   output$distPlot3 <- renderPlot({
     df <- data.frame(simulaciones,errores=vector1(),errores_importance=vector2(),errores_importance_beta=vector3())
-    df1 <- melt(df,id.vars = 1,variable.name = "variable")
+    df1 <- melt(df,id.vars = 1,variable.name = "Tipo de aproximación")
     df1 <- cbind(rep(1:length(simulaciones),3),df1)
     names(df1) = c("indice",names(df1)[2:4])
-    plot1 <- ggplot(df1, aes(indice,value)) + geom_line(aes(colour = variable)) + theme(legend.position="top")
-    plot2 <- ggplot(df1, aes(simulaciones,value)) + geom_line(aes(colour = variable)) + theme(legend.position="top")
+    plot1 <- ggplot(df1, aes(indice,value)) + geom_line(aes(colour = variable)) + theme(legend.position="top") + xlab("Indice de simulacion") +ylab("Error al valor real") +ggtitle("Comparativo del error de aproximación de la integral para diferentes tamaños de simulaciones")
+    plot2 <- ggplot(df1, aes(simulaciones,value)) + geom_line(aes(colour = variable)) + theme(legend.position="top") + xlab("Tamaño de simulacion") +ylab("Error al valor real") +ggtitle("Comparativo del error de aproximación de la integral para diferentes tamaños de simulaciones")
     grid.arrange(plot1, plot2, ncol=2)
     
   })
