@@ -12,7 +12,7 @@ library(gridExtra)
 
 shinyServer(function(input, output) {
 
-  m=1
+  m=reactive(input$m)
   simulaciones <- c(seq(1000,10000,1000),seq(10000,100000,10000))
   lambda=0.5
   truncate=2
@@ -59,51 +59,51 @@ shinyServer(function(input, output) {
     return (data.frame(point_estimate = mi.func, int.low = interval.lower,int.upp = interval.upper))
   }  
   
-  df <- data.frame(simulaciones)
-  res_montecarlo_raw <- sapply(simulaciones,montecarlo_tartare,0.05,my_func,0,2,m=m)
-  errores <- analyticalintegration_0_2(0,2,m) - sapply(res_montecarlo_raw[1,],c) 
-  df <- cbind(df,errores)
+  
+  
+  res_montecarlo_raw <- reactive(sapply(simulaciones,montecarlo_tartare,0.05,my_func,0,2,m=m()))
+  errores <- reactive(analyticalintegration_0_2(0,2,m()) - sapply(res_montecarlo_raw()[1,],c)) 
+  vector1 <- reactive(errores())
   #plot(1:length(simulaciones),errores,type="l")
-  
-  res_montecarlo_importance <- sapply(simulaciones,montecarlo_importance,0.05,my_func,0,2,lambda,truncate,m=m)
-  errores_importance <- analyticalintegration_0_2(0,2,m) - sapply(res_montecarlo_importance[1,],c) 
-  df <- cbind(df,errores_importance)
+  res_montecarlo_importance <- reactive(sapply(simulaciones,montecarlo_importance,0.05,my_func,0,2,lambda,truncate,m=m()))
+  errores_importance <- reactive(analyticalintegration_0_2(0,2,m()) - sapply(res_montecarlo_importance()[1,],c)) 
+  vector2 <- reactive(errores_importance())
   #plot(1:length(simulaciones),errores_importance,type="l")
-  
-  res_montecarlo_importance_beta <- sapply(simulaciones,montecarlo_importance_beta,0.05,my_func,0,2,a_beta,b_beta,m=m)
-  errores_importance_beta <- analyticalintegration_0_2(0,2,m) - sapply(res_montecarlo_importance_beta[1,],c) 
-  df <- cbind(df,errores_importance_beta)
+  res_montecarlo_importance_beta <- reactive(sapply(simulaciones,montecarlo_importance_beta,0.05,my_func,0,2,a_beta,b_beta,m=m()))
+  errores_importance_beta <- reactive(analyticalintegration_0_2(0,2,m()) - sapply(res_montecarlo_importance_beta()[1,],c)) 
+  vector3 <- reactive(errores_importance_beta())
   #plot(1:length(simulaciones),errores_importance_beta,type="l")
   
+  
   output$text1 <- renderText({ 
-    paste0("El valor de la integral deberia ser ",analyticalintegration_0_2(0,2,m))
+    paste0("El valor de la integral deberia ser ",analyticalintegration_0_2(0,2,m()))
   })
   
   output$distPlot <- renderPlot({
-
-    plot(sapply(res_montecarlo_raw[1,],c),type="l")
-    lines(sapply(res_montecarlo_raw[2,],c),type="l",lty=2,col="red")
-    lines(sapply(res_montecarlo_raw[3,],c),type="l",lty=2,col="red")
-    abline(h =analyticalintegration_0_2(0,2,m), untf = FALSE)
+   
+    plot(sapply(res_montecarlo_raw()[1,],c),type="l")
+    lines(sapply(res_montecarlo_raw()[2,],c),type="l",lty=2,col="red")
+    lines(sapply(res_montecarlo_raw()[3,],c),type="l",lty=2,col="red")
+    abline(h =analyticalintegration_0_2(0,2,m()), untf = FALSE)
   })
   output$distPlot1 <- renderPlot({
     
-    plot(sapply(res_montecarlo_importance[1,],c),type="l")
-    lines(sapply(res_montecarlo_importance[2,],c),type="l",lty=2,col="red")
-    lines(sapply(res_montecarlo_importance[3,],c),type="l",lty=2,col="red")
-    abline(h =analyticalintegration_0_2(0,2,m), untf = FALSE)
+    plot(sapply(res_montecarlo_importance()[1,],c),type="l")
+    lines(sapply(res_montecarlo_importance()[2,],c),type="l",lty=2,col="red")
+    lines(sapply(res_montecarlo_importance()[3,],c),type="l",lty=2,col="red")
+    abline(h =analyticalintegration_0_2(0,2,m()), untf = FALSE)
     
   })
   output$distPlot2 <- renderPlot({
     
-    plot(sapply(res_montecarlo_importance_beta[1,],c),type="l")
-    lines(sapply(res_montecarlo_importance_beta[2,],c),type="l",lty=2,col="red")
-    lines(sapply(res_montecarlo_importance_beta[3,],c),type="l",lty=2,col="red")
-    abline(h =analyticalintegration_0_2(0,2,m), untf = FALSE)
+    plot(sapply(res_montecarlo_importance_beta()[1,],c),type="l")
+    lines(sapply(res_montecarlo_importance_beta()[2,],c),type="l",lty=2,col="red")
+    lines(sapply(res_montecarlo_importance_beta()[3,],c),type="l",lty=2,col="red")
+    abline(h =analyticalintegration_0_2(0,2,m()), untf = FALSE)
     
   })
   output$distPlot3 <- renderPlot({
-    
+    df <- data.frame(simulaciones,errores=vector1(),errores_importance=vector2(),errores_importance_beta=vector3())
     df1 <- melt(df,id.vars = 1,variable.name = "variable")
     df1 <- cbind(rep(1:length(simulaciones),3),df1)
     names(df1) = c("indice",names(df1)[2:4])
